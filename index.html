@@ -1,362 +1,835 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>حساب المعدل</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حساب المعدل الجامعي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<style>
-body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #ffe6f0, #ffccf2);
-    color: #333;
-}
+        body {
+            font-family: 'Almarai', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
 
-/* شاشة الترحيب */
-#welcome {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    text-align: center;
-}
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
 
-#welcome h1 {
-    font-size: 36px;
-    background: linear-gradient(90deg,#ff4ecd,#ff9cee);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 20px;
-}
+        .bubbles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
 
-.container {
-    max-width: 600px;
-    margin: auto;
-    padding: 20px;
-}
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: float 15s infinite ease-in-out;
+        }
 
-h1 {
-    text-align: center;
-    margin-bottom: 30px;
-    font-size: 28px;
-    background: linear-gradient(90deg,#ff4ecd,#8a337c);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+        .bubble:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            left: 10%;
+            bottom: -80px;
+            animation-delay: 0s;
+            animation-duration: 12s;
+        }
 
-.card {
-    background: #fff0f8;
-    border-radius: 20px;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 8px 15px rgba(255,0,150,0.2);
-    transition: 0.8s;
-}
+        .bubble:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            left: 25%;
+            bottom: -120px;
+            animation-delay: 2s;
+            animation-duration: 16s;
+        }
 
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(255,0,180,0.3);
-}
+        .bubble:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            left: 50%;
+            bottom: -60px;
+            animation-delay: 4s;
+            animation-duration: 14s;
+        }
 
-.header {
-    display: flex;
-    justify-content: space-between;
-    font-weight: bold;
-    margin-bottom: 15px;
-    color: #ff4ecd;
-}
+        .bubble:nth-child(4) {
+            width: 100px;
+            height: 100px;
+            left: 70%;
+            bottom: -100px;
+            animation-delay: 6s;
+            animation-duration: 18s;
+        }
 
-.inputs {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 15px;
-}
+        .bubble:nth-child(5) {
+            width: 90px;
+            height: 90px;
+            left: 85%;
+            bottom: -90px;
+            animation-delay: 8s;
+            animation-duration: 15s;
+        }
 
-.input-box {
-    flex: 1;
-}
+        @keyframes float {
+            0% {
+                bottom: -200px;
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                bottom: 110%;
+                opacity: 0;
+            }
+        }
 
-input {
-    width: 90%;
-    flex: 1;
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid #ffb3f5;
-    text-align: center;
-    font-size: 16px;
-    outline: none;
-    transition: 0.3s;
-    background: #fff0f8;
-}
-   
-input:focus {
-    box-shadow: 0 0 10px #830c61;
-}
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
 
-.result {
-    display: flex;
-    gap: 10px;
-}
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeIn 1s ease-out;
+        }
 
-.result-box {
-    flex: 1;
-    background: #ffe6f0;
-    padding: 10px;
-    border-radius: 12px;
-    text-align: center;
-}
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-.result-box span {
-    display: block;
-    font-size: 13px;
-    opacity: 0.8;
-}
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 15px;
+            text-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            letter-spacing: 1px;
+        }
 
-.result-box strong {
-    font-size: 18px;
-    color: #ff4ecd;
-}
+        .subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 300;
+        }
 
-.warn-glow {
-    color: #ff1a75;
-    font-size: 12px;
-    margin-top: 2px;
-    text-align: center;
-    display: none;
-    animation: glow 1s ease-in-out infinite alternate;
-}
+        .glass-card {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 45px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                0 8px 32px 0 rgba(31, 38, 135, 0.37),
+                inset 0 0 20px rgba(255, 255, 255, 0.05);
+            margin-bottom: 30px;
+            animation: slideUp 0.8s ease-out;
+        }
 
-@keyframes glow {
-    from { text-shadow: 0 0 2px #ff99cc, 0 0 5px #ff66b2; }
-    to { text-shadow: 0 0 5px #ff66b2, 0 0 10px #ff3399; }
-}
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-button#startBtn {
+        .subject-item {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .subject-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .subject-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .subject-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .coefficient-badge {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 20px;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        label {
+            display: block;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 10px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-family: 'Almarai', sans-serif;
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        input[type="number"]::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        input[type="number"]:valid {
+            border-color: rgba(144, 238, 144, 0.5);
+        }
+
+        .result-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-radius: 30px;
+            padding: 50px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 
+                0 8px 32px 0 rgba(31, 38, 135, 0.37),
+                inset 0 0 30px rgba(255, 255, 255, 0.08);
+            animation: slideUp 0.8s ease-out 0.3s backwards;
+        }
+
+        .result-label {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .result-value {
+            font-size: 5.5rem;
+            font-weight: 800;
+            color: white;
+            text-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            margin-bottom: 25px;
+            animation: scaleIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .result-status {
+            font-size: 1.6rem;
+            font-weight: 700;
+            padding: 15px 40px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            display: inline-block;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        .details-card {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 40px;
+            margin-top: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                0 8px 32px 0 rgba(31, 38, 135, 0.37),
+                inset 0 0 20px rgba(255, 255, 255, 0.05);
+            animation: slideUp 0.8s ease-out 0.5s backwards;
+        }
+
+        .details-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .grades-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+
+        .grades-table thead th {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 15px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-align: right;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .grades-table thead th:first-child {
+            border-radius: 15px 0 0 15px;
+        }
+
+        .grades-table thead th:last-child {
+            border-radius: 0 15px 15px 0;
+        }
+
+        .grades-table tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        .grades-table tbody tr:hover {
+            transform: translateX(-5px);
+        }
+
+        .grades-table tbody td {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            color: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .grades-table tbody td:first-child {
+            border-radius: 15px 0 0 15px;
+            text-align: right;
+            font-weight: 700;
+        }
+
+        .grades-table tbody td:last-child {
+            border-radius: 0 15px 15px 0;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .grades-table tbody tr:hover td {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .total-row td {
+            background: rgba(255, 255, 255, 0.25) !important;
+            border: 2px solid rgba(255, 255, 255, 0.4) !important;
+            font-size: 1.1rem !important;
+            font-weight: 800 !important;
+            padding: 20px 15px !important;
+        }
+
+        .total-row td:last-child {
+            font-size: 1.4rem !important;
+            color: white;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            font-family: 'Almarai', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 35px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .calculate-btn:hover {
+            background: rgba(255, 255, 255, 0.35);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .calculate-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .note {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 25px;
+            border-radius: 20px;
+            margin-top: 35px;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.95);
+            line-height: 1.8;
+        }
+
+        .note strong {
+            color: white;
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .glass-card {
+                padding: 30px 20px;
+            }
+
+            .result-value {
+                font-size: 4rem;
+            }
+
+            .input-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .subject-item {
+                padding: 25px 20px;
+            }
+        }
+
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        /* Smooth scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+        .footer {
     width: 100%;
-    padding: 15px;
-    font-size: 18px;
-    border-radius: 12px;
-    border: none;
-    background: linear-gradient(90deg,#ff4ecd,#ff9cee);
-    color: white;
-    cursor: pointer;
-    margin-top: 15px;
-    box-shadow: 0 5px 20px rgba(255,0,150,0.3);
-    transition: 0.3s;
-}
-
-button#startBtn:hover {
-    transform: scale(1.03);
-    box-shadow: 0 8px 25px rgba(255,0,180,0.5);
-}
-
-.global {
-    background: linear-gradient(90deg,#b578aa,#e473c2);
-    padding: 20px;
-    border-radius: 20px;
-    text-align: center;
-    font-size: 22px;
-    font-weight: bold;
-    margin-top: 40px;
-    animation: pulse 2s infinite;
-    transition: 0.5s;
-}
-
-/* أنيميشن pulse عند تغير المعدل */
-
-@keyframes pulse {
-    0% { transform: scale(1); background: linear-gradient(90deg,#ff99cc,#ff66b2); }
-    50% { transform: scale(1.05); background: linear-gradient(90deg,#ff66b2,#ff1a75); }
-    100% { transform: scale(1); background: linear-gradient(90deg,#b578aa,#e473c2); }
-}
-
-@media(max-width:500px){
-    .inputs { flex-direction: column; }
-    .result { flex-direction: column; }
-}
-
-.top-line {
-    height: 5px;
-    background: linear-gradient(90deg, #f163cd, #f838c8);
-}
-.footer {
-    width: 100%;
     text-align: center;
     font-size: 12px;
-    color: #94a3b8; /* لون فاتح */
+    color: #ecf0f4; /* لون فاتح */
     padding: 10px 0;
-    position: fixed; /* يبقى تحت المحتوى */
     bottom: 0;
     left: 0;    
     margin-top: 30px; /* شوية مسافة عن المحتوى */
 }
-</style>
+    </style>
 </head>
-
 <body>
+    <div class="bubbles">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
 
-<!-- شاشة الترحيب -->
-<div id="welcome">
-    <h1>مرحبا بك في موقع معدلك  💖</h1>
-    <button id="startBtn">ابدأ</button>
+    <div class="container">
+        <header>
+            <h1>خاص بطلاب المدرسة العليا للأساتذة ابتدائي أدب عربي </h1>
+            <p class="subtitle">احسب معدلك بدقة وسهولة</p>
+        </header>
 
+        <div class="glass-card">
+            <form id="gradeForm">
+                <!-- Subjects with Exam + TD -->
+                <div class="subject-item">
+                    <div class="subject-header">
+                        <span class="subject-name">رياضيات 1</span>
+                        <span class="coefficient-badge">المعامل: 2</span>
+                    </div>
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label> </label>
+                            <input type="number" id="math_exam" min="0" max="20" step="0.25" placeholder="Exam" required>
+                        </div>
+                        <div class="input-group">
+                            <label> </label>
+                            <input type="number" id="math_td" min="0" max="20" step="0.25" placeholder="TD" required>
+                        </div>
+                    </div>
+                </div>
 
-<div class="footer">
- <h3>By aso </h3> © 2026 جميع الحقوق محفوظة - موقع حساب المعدل
-</div>
+                <div class="subject-item">
+                    <div class="subject-header">
+                        <span class="subject-name">فيزياء 1</span>
+                        <span class="coefficient-badge">المعامل: 2</span>
+                    </div>
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label> </label>
+                            <input type="number" id="physics_exam" min="0" max="20" step="0.25" placeholder="Exam" required>
+                        </div>
+                        <div class="input-group">
+                            <label> </label>
+                            <input type="number" id="physics_td" min="0" max="20" step="0.25" placeholder="TD" required>
+                        </div>
+                    </div>
+                </div>
 
-</div>
+                <div class="subject-item">
+                    <div class="subject-header">
+                        <span class="subject-name">صرف عربي 1</span>
+                        <span class="coefficient-badge">المعامل: 2</span>
+                    </div>
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label> </label>
+                            <input type="number" id="sarf_exam" min="0" max="20" step="0.25" placeholder="Exam" required>
+                        </div>
+                        <div class="input-group">
+                            <label> </label>
+                            <input type="number" id="sarf_td" min="0" max="20" step="0.25" placeholder="TD" required>
+                        </div>
+                    </div>
+                </div>
 
+                <div class="subject-item">
+                    <div class="subject-header">
+                        <span class="subject-name">نحو عربي 1</span>
+                        <span class="coefficient-badge">المعامل: 2</span>
+                    </div>
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label> </label>
+                            <input type="number" id="nahw_exam" min="0" max="20" step="0.25" placeholder="Exam" required>
+                        </div>
+                        <div class="input-group">
+                            <label> </label>
+                            <input type="number" id="nahw_td" min="0" max="20" step="0.25" placeholder="TD" required>
+                        </div>
+                    </div>
+                </div>
 
-<div class="container" id="main" style="display:none;">
-<h1>مخصص لطلاب المدرسة العليا للاساتذة ابتدائي أدب عربي فقط</h1>
+                <div class="subject-item">
+                    <div class="subject-header">
+                        <span class="subject-name">الأدب العربي قديما و حديثا 1</span>
+                        <span class="coefficient-badge">المعامل: 2</span>
+                    </div>
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label> </label>
+                            <input type="number" id="adab_exam" min="0" max="20" step="0.25" placeholder="Exam" required>
+                        </div>
+                        <div class="input-group">
+                            <label> </label>
+                            <input type="number" id="adab_td" min="0" max="20" step="0.25" placeholder="TD" required>
+                        </div>
+                    </div>
+                </div>
 
-<div class="top-line" ></div>
+                <div class="subject-item">
+                    <div class="subject-header">
+                        <span class="subject-name">تربية إسلامية 1</span>
+                        <span class="coefficient-badge">المعامل: 2</span>
+                    </div>
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label> </label>
+                            <input type="number" id="islamic_exam" min="0" max="20" step="0.25" placeholder="Exam" required>
+                        </div>
+                    </div>
+                </div>
 
-<h1>حساب معدل السداسي الأول </h1>
+                <div class="subject-item">
+                    <div class="subject-header">
+                        <span class="subject-name">تكنولوجيا الإعلام والاتصال</span>
+                        <span class="coefficient-badge">المعامل: 1</span>
+                    </div>
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label> </label>
+                            <input type="number" id="tic_exam" min="0" max="20" step="0.25" placeholder="Exam" required>
+                        </div>
+                        <div class="input-group">
+                            <label> </label>
+                            <input type="number" id="tic_td" min="0" max="20" step="0.25" placeholder="TD" required>
+                        </div>
+                    </div>
+                </div>
 
-<div id="subjects"></div>
-<div class="global">
-المعدل العام : <span id="globalMoy">0.00</span>
-</div>
-</div>
+                <!-- Exam Only -->
+                <div class="subject-item">
+                    <div class="subject-header">
+                        <span class="subject-name">بلاغة عربية 1</span>
+                        <span class="coefficient-badge">المعامل: 1</span>
+                    </div>
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label> </label>
+                            <input type="number" id="balagha_exam" min="0" max="20" step="0.25" placeholder="Exam" required>
+                        </div>
+                    </div>
+                </div>
 
-<script>
-const subjects = [
-{ name:"1 الأدب العربي", coef:2 },
-{ name:"1 الرياضيات", coef:2 },
-{ name:"1 الصرف العربي", coef:2 },
-{ name:"البلاغة", coef:1 },
-{ name:"1 النحو العربي", coef:2 },
-{ name:"تكنولوجيا الإعلام والاتصال", coef:1 },
-{ name:"1 تربية إسلامية", coef:2 },
-{ name:"الإملاء", coef:1 },
-{ name:"فنيات الكتابة", coef:1 },
-{ name:"فيزياء 1", coef:2 }
-];
+                <!-- TD Only -->
+                <div class="subject-item">
+                    <div class="subject-header">
+                        <span class="subject-name">إملاء</span>
+                        <span class="coefficient-badge">المعامل: 1</span>
+                    </div>
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label> </label>
+                            <input type="number" id="imlaa_td" min="0" max="20" step="0.25" placeholder="TD" required>
+                        </div>
+                    </div>
+                </div>
 
-// شاشة الترحيب
-document.getElementById('startBtn').addEventListener('click', function(){
-    document.getElementById('welcome').style.display = 'none';
-    document.getElementById('main').style.display = 'block';
-    generateSubjects();
-    addValidation();
-    calculate();
-});
+                <div class="subject-item">
+                    <div class="subject-header">
+                        <span class="subject-name">فنيات الكتابة</span>
+                        <span class="coefficient-badge">المعامل: 1</span>
+                    </div>
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label> </label>
+                            <input type="number" id="faniyat_td" min="0" max="20" step="0.25" placeholder="TD" required>
+                        </div>
+                    </div>
+                </div>
 
-// توليد المواد
-function generateSubjects(){
-    const container = document.getElementById("subjects");
-    container.innerHTML = "";
-    subjects.forEach((sub,index)=>{
-        container.innerHTML += `
-        <div class="card">
-            <div class="header">
-                <div>${sub.name}</div>
-                <div>المعامل : ${sub.coef}</div>
+                <button type="submit" class="calculate-btn">احسب المعدل</button>
+            </form>
+
+            <div class="note">
+                <strong>💡 نظام الحساب</strong>
+                المواد اللي فيها امتحان و TD: الامتحان يمثل 67% والـ TD يمثل 33% من العلامة النهائية
             </div>
-            <div class="inputs">
-                <div class="input-box">
-                    <input type="number" placeholder="TD" min="0" max="20" step="0.25" class="td" data-id="${index}">
-                    <div class="warn-glow">لا تتجاوز 20</div>
-                </div>
-                <div class="input-box">
-                    <input type="number" placeholder="الاختبار" min="0" max="20" step="0.25" class="exam" data-id="${index}">
-                    <div class="warn-glow">لا تتجاوز 20 </div>
-                </div>
-            </div>
-            <div class="result">
-                <div class="result-box">
-                    <span>معدل المادة</span>
-                    <strong id="moy${index}">0.00</strong>
-                </div>
-                <div class="result-box">
-                    <span>معدل × معامل</span>
-                    <strong id="coefMoy${index}">0.00</strong>
-                </div>
-            </div>
-        </div>`;
-    });
-}
-document.addEventListener("input", function(e){
+        </div>
 
-    if(e.target.classList.contains("td") || 
-       e.target.classList.contains("exam")){
+        <div class="footer">
+          <h3>By aso </h3> © 2026 جميع الحقوق محفوظة - موقع حساب المعدل
+        </div>
 
-        let value = parseFloat(e.target.value);
+        <div class="result-card" id="resultCard" style="display: none;">
+            <div class="result-label">معدلك النهائي</div>
+            <div class="result-value" id="averageValue">-</div>
+            <div class="result-status" id="statusText">-</div>
+        </div>
 
-        if(value > 20){
-            e.target.value = 20;
-        }
+        <div class="details-card" id="detailsCard" style="display: none;">
+            <div class="details-title">📊 تفاصيل المعدلات</div>
+            <table class="grades-table">
+                <thead>
+                    <tr>
+                        <th>المادة</th>
+                        <th>المعامل</th>
+                        <th>المعدل</th>
+                    </tr>
+                </thead>
+                <tbody id="gradesTableBody">
+                    <!-- Will be filled by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-        if( value == 0){
-            e.target.value = 0;
-        }
+    <script>
+        document.getElementById('gradeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const subjectsConfig = [
+                { exam: 'math_exam', td: 'math_td', coef: 2, hasExam: true, hasTD: true, name: 'رياضيات' },
+                { exam: 'physics_exam', td: 'physics_td', coef: 2, hasExam: true, hasTD: true, name: 'فيزياء' },
+                { exam: 'sarf_exam', td: 'sarf_td', coef: 2, hasExam: true, hasTD: true, name: 'صرف عربي' },
+                { exam: 'nahw_exam', td: 'nahw_td', coef: 2, hasExam: true, hasTD: true, name: 'نحو عربي' },
+                { exam: 'adab_exam', td: 'adab_td', coef: 2, hasExam: true, hasTD: true, name: 'أدب عربي' },
+                { exam: 'islamic_exam', td: 'islamic_td', coef: 2, hasExam: true, hasTD: false, name: 'تربية إسلامية' },
+                { exam: 'tic_exam', td: 'tic_td', coef: 1, hasExam: true, hasTD: true, name: 'تكنولوجيا الإعلام والاتصال' },
+                { exam: 'balagha_exam', coef: 1, hasExam: true, hasTD: false, name: 'بلاغة' },
+                { td: 'imlaa_td', coef: 1, hasExam: false, hasTD: true, name: 'إملاء' },
+                { td: 'faniyat_td', coef: 1, hasExam: false, hasTD: true, name: 'فنيات الكتابة' }
+            ];
 
-    }
+            let totalPoints = 0;
+            let totalCoefficients = 0;
+            let gradesData = [];
 
-});
+            subjectsConfig.forEach(subject => {
+                let subjectGrade = 0;
 
-// حساب المعدل
-document.addEventListener("input", calculate);
+                if (subject.hasExam && subject.hasTD) {
+                    const examGrade = parseFloat(document.getElementById(subject.exam).value);
+                    const tdGrade = parseFloat(document.getElementById(subject.td).value);
+                    subjectGrade = (examGrade * 0.67) + (tdGrade * 0.33);
+                } else if (subject.hasExam) {
+                    subjectGrade = parseFloat(document.getElementById(subject.exam).value);
+                } else if (subject.hasTD) {
+                    subjectGrade = parseFloat(document.getElementById(subject.td).value);
+                }
 
-function calculate(){
-    let total = 0;
-    let totalCoef = 0;
+                gradesData.push({
+                    name: subject.name,
+                    coef: subject.coef,
+                    grade: subjectGrade
+                });
 
-    subjects.forEach((sub,index)=>{
-        let td = parseFloat(document.querySelectorAll(".td")[index].value) || 0;
-        let exam = parseFloat(document.querySelectorAll(".exam")[index].value) || 0;
+                totalPoints += subjectGrade * subject.coef;
+                totalCoefficients += subject.coef;
+            });
 
-        // منع تجاوز 20 و أقل من 0
-        if(td>20) td=20;
-        if(td<0) td=0;
-        if(exam>20) exam=20;
-        if(exam<0) exam=0;
+            const average = totalPoints / totalCoefficients;
 
-        let moy = 0;
-        if(td && exam) moy = td*0.33 + exam*0.67;
-        else if(exam) moy = exam;
-        else if(td) moy = td;
-
-        let coefMoy = moy*sub.coef;
-
-        document.getElementById("moy"+index).innerText = moy.toFixed(2);
-        document.getElementById("coefMoy"+index).innerText = coefMoy.toFixed(2);
-
-        total += coefMoy;
-        totalCoef += sub.coef;
-    });
-
-    let global = totalCoef ? total/totalCoef : 0;
-    const globalSpan = document.getElementById("globalMoy");
-    globalSpan.innerText = global.toFixed(2);
-
-    // أنيميشن Flash عند تغير المعدل
-    const globalBox = document.querySelector(".global");
-    globalBox.classList.remove("flash");
-    void globalBox.offsetWidth; // إعادة تفعيل الأنيميشن
-    globalBox.classList.add("flash");
-}
-
-// إضافة تحذير Glow تلقائي
-function addValidation(){
-    document.querySelectorAll(".td, .exam").forEach(input=>{
-        const warn = input.nextElementSibling;
-        input.addEventListener("input", function(){
-            if(parseFloat(input.value) > 20 || parseFloat(input.value) < 0){
-                warn.style.display="block";
+            // Display overall average
+            document.getElementById('averageValue').textContent = average.toFixed(2);
+            
+            let status = '';
+            if (average >= 16) {
+                status = '✨ مبرووووك';
+            } else if (average >= 14) {
+                status = '✨ مبروووك';
+            } else if (average >= 12) {
+                status = '✨ مبرووك';
+            } else if (average >= 10) {
+                status = '✨ مبروك';
             } else {
-                warn.style.display="none";
+                status = '💪 لابأس حاول في السداسي الثاني العمل أكثر ';
             }
+            
+            document.getElementById('statusText').textContent = status;
+            document.getElementById('resultCard').style.display = 'block';
+
+            // Display detailed grades table
+            const tableBody = document.getElementById('gradesTableBody');
+            tableBody.innerHTML = '';
+
+            gradesData.forEach(subject => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${subject.name}</td>
+                    <td style="text-align: center;">${subject.coef}</td>
+                    <td>${subject.grade.toFixed(2)}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            // Add total row
+            const totalRow = document.createElement('tr');
+            totalRow.className = 'total-row';
+            totalRow.innerHTML = `
+                <td>المعدل العام</td>
+                <td style="text-align: center;">${totalCoefficients}</td>
+                <td>${average.toFixed(2)}</td>
+            `;
+            tableBody.appendChild(totalRow);
+
+            document.getElementById('detailsCard').style.display = 'block';
+            
+            // Scroll to result
+            setTimeout(() => {
+                document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
         });
-    });
-}
-
-</script>
-
+    </script>
 </body>
 </html>
-
